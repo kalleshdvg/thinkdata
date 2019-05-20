@@ -32,20 +32,15 @@ resource "aws_instance" "thinkdata" {
  resource "aws_instance" "thinkdatadb" {
   ami           = "${lookup(var.AMIS, var.AWS_REGION)}"
   instance_type = "t2.micro"
+   instance_type = "t2.micro"
+  user_data = <<-EOF
+                #!/bin/bash
+                yum install -y mysql56-server
+              EOF
   tags = {
     Name = "DBServer-private"
 	}
   
- # provisioner "file" {
-  #  source = "mysql.sh"
-   # destination = "/tmp/mysql.sh"
-#}	
- #provisioner "remote-exec" {
-  #  inline = [
-   #   "chmod +x /tmp/mysql.sh",
-    #  "sudo /tmp/mysql.sh"
-    #]
-  #}
 
   connection {
     user = "${var.INSTANCE_USERNAME}"
